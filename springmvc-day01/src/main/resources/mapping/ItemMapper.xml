@@ -1,0 +1,17 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaole.springmvc.mapper.ItemMapper">
+
+    <resultMap id="item" type="com.gaole.springmvc.entity.Item">
+        <id column="i_id" property="id"></id>
+        <result column="i_name" property="name"></result>
+        <result column="i_price" property="price"></result>
+        <result column="i_createtime" property="createtime"></result>
+        <result column="i_detail" property="detail"></result>
+    </resultMap>
+
+    <select id="findAll" resultMap="item">
+        select * from t_item;
+    </select>
+</mapper>

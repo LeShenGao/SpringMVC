@@ -1,6 +1,7 @@
 package com.gaole.springmvc.service.impl;
 
 import com.gaole.springmvc.entity.Item;
+import com.gaole.springmvc.entity.QueryVo;
 import com.gaole.springmvc.mapper.ItemMapper;
 import com.gaole.springmvc.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,17 @@ public class ItemServiceImpl implements ItemService {
 
     public List<Item> findAll() {
         return itemMapper.findAll();
+    }
+
+    public Item findById(Integer id) {
+        return itemMapper.findById(id);
+    }
+
+    public void updateItem(Item item) {
+        itemMapper.updateItem(item);
+    }
+
+    public List<Item> selectItem(QueryVo queryVo) {
+        return itemMapper.selectItem(queryVo);
     }
 }

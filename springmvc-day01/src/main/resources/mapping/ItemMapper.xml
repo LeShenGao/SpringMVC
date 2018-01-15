@@ -1,7 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gaole.springmvc.mapper.ItemMapper">
+
+    <!--抽取SQL片段-->
+    <sql id="selector">
+        select * from t_item
+    </sql>
 
     <resultMap id="item" type="com.gaole.springmvc.entity.Item">
         <id column="i_id" property="id"></id>
@@ -12,6 +18,29 @@
     </resultMap>
 
     <select id="findAll" resultMap="item">
-        select * from t_item;
+        <include refid="selector"></include>
     </select>
+
+
+    <select id="findById" resultMap="item">
+        <include refid="selector"></include>
+        WHERE i_id = #{id};
+    </select>
+
+    <update id="updateItem" parameterType="com.gaole.springmvc.entity.Item">
+        update t_item SET i_name = #{name},i_price = #{price},i_createtime = #{createtime},i_detail = #{detail} where i_id = #{id};
+    </update>
+
+    <select id="selectItem" parameterType="com.gaole.springmvc.entity.QueryVo"
+            resultMap="item">
+        <include refid="selector"></include>
+        WHERE
+        <if test="item.id != null and item.id != ''">
+            i_id = #{item.id}
+        </if>
+        <if test="item.name != null and item.name != ''">
+            and i_name like "%"#{item.name}"%"
+        </if>
+    </select>
+
 </mapper>

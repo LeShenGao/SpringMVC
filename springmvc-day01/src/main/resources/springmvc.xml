@@ -10,26 +10,26 @@
     <!--开启注解扫描 @Controller @Service-->
     <context:component-scan base-package="com.gaole.springmvc"/>
 
-    <!--引入外部数据库配置文件-->
-    <context:property-placeholder location="classpath:db.properties"/>
+    <!--处理器映射器过期,需手动配置新的,处理器适配器也一样-->
+    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>-->
+    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>-->
 
-    <!--配置C3P0连接池-->
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="${jdbc.driver}"/>
-        <property name="jdbcUrl" value="${jdbc.url}"/>
-        <property name="user" value="${jdbc.user}"/>
-        <property name="password" value="${jdbc.password}"/>
+    <!--使用注解驱动,解决手动配置新的处理器映射器和处理器适配器-->
+    <mvc:annotation-driven conversion-service="formattingConversionService"/>
+
+    <!--配置转换器-->
+    <bean id="formattingConversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.gaole.springmvc.converter.DateConverter"></bean>
+            </set>
+        </property>
     </bean>
 
-    <!--配置SqlSessionFactory-->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <!--加载核心配置文件-->
-        <property name="configLocation" value="classpath:sqlMapConfig.xml"/>
-    </bean>
-
-    <!--配置Mapper动态代理 扫描-->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.gaole.springmvc.mapper"/>
+    <!--手动配置视图解析器,解决在控制器中设置视图的前缀和后缀问题-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
     </bean>
 </beans>

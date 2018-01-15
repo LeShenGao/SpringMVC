@@ -1,6 +1,7 @@
 package com.gaole.springmvc.controller;
 
 import com.gaole.springmvc.entity.Item;
+import com.gaole.springmvc.entity.QueryVo;
 import com.gaole.springmvc.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,8 +37,58 @@ public class ItemController {
 //        给对象中添加查询到的数据
         modelAndView.addObject("list", items);
 //        设置返回的JSP视图
-        modelAndView.setViewName("/WEB-INF/jsp/list.jsp");
+        modelAndView.setViewName("list");
 
+        return modelAndView;
+    }
+
+    /**
+     * 根据id查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("/item/editItem.action")
+    public ModelAndView findById(Integer id) {
+        Item item = itemService.findById(id);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("item", item);
+        modelAndView.setViewName("editItem");
+
+        return modelAndView;
+    }
+
+    /**
+     * 根据前台表单传递的参数,进行对数据的修改
+     * 主要是根据商品的编号进行商品的修改
+     *
+     * @param item
+     * @return
+     */
+    @RequestMapping("/item/updateItem.action")
+    public ModelAndView updateItem(Item item) {
+
+        itemService.updateItem(item);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("success");
+        return modelAndView;
+    }
+
+    /**
+     * 根据包装类信息,查询商品信息
+     * @param queryVo
+     * @return
+     */
+    @RequestMapping("/item/select.action")
+    public ModelAndView queryVo(QueryVo queryVo){
+
+        List<Item> items = itemService.selectItem(queryVo);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("list",items);
+        modelAndView.setViewName("list");
         return modelAndView;
     }
 }
